@@ -1,0 +1,505 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Unity Projects\\New DICOM\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|c:\\unity projects\\new dicom\\assets\\dicomparser\\difile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomparser\\difile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomparser\\difilestream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomparser\\difilestream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomparser\\imagestack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomparser\\imagestack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\viewmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\viewmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\volumesettingspanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\volumesettingspanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\volumerendering\\scripts\\transformcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\volumerendering\\scripts\\transformcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomparser\\didictonary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomparser\\didictonary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\slider\\scripts\\uislidercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\slider\\scripts\\uislidercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\windowsettingspanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\windowsettingspanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\segmentation\\segmentcache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\segmentation\\segmentcache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\segmentconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\segmentconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\globalworkindicator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\globalworkindicator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\holotoolkit\\utilities\\scripts\\billboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\holotoolkit\\utilities\\scripts\\billboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\holotoolkit\\common\\scripts\\interpolator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\holotoolkit\\common\\scripts\\interpolator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\delayactivation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\delayactivation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\threads\\threadgroupstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\threads\\threadgroupstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\progresshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\progresshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\raymarch import\\scripts\\raymarching.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\raymarch import\\scripts\\raymarching.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\slice2dview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\slice2dview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\orthoslices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\orthoslices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\volumerendering\\scripts\\volumerendering.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\volumerendering\\scripts\\volumerendering.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\raymarch import\\scripts\\slicemesh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\raymarch import\\scripts\\slicemesh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\dicomviews\\pixelclickhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\dicomviews\\pixelclickhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\volumerendering\\scripts\\axis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\volumerendering\\scripts\\axis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|C:\\Unity Projects\\New DICOM\\assets\\volumerendering\\scripts\\volumerenderingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E0E2A303-383A-1F0C-0007-7964EAF6995A}|Assembly-CSharp.csproj|solutionrelative:assets\\volumerendering\\scripts\\volumerenderingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiMemoryFileStream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\DICOMParser\\DiMemoryFileStream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiBaseStream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\DICOMParser\\DiBaseStream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ViewManager.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\ViewManager.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\ViewManager.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\ViewManager.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\ViewManager.cs",
+              "ViewState": "AgIAAKAAAAAAAAAAAAAnwEkBAABWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T22:27:58.052Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ImageStack.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\ImageStack.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\ImageStack.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\ImageStack.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\ImageStack.cs",
+              "ViewState": "AgIAAN8AAAAAAAAAAAAkwPgAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T17:31:19.499Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DiFile.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiFile.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\DiFile.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiFile.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\DiFile.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAowFwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T19:36:01.335Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DiFileStream.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiFileStream.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\DiFileStream.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiFileStream.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\DiFileStream.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T04:26:31.575Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "DiBaseStream.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiBaseStream.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\DiBaseStream.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiBaseStream.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\DiBaseStream.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T18:16:30.914Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "DiMemoryFileStream.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiMemoryFileStream.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\DiMemoryFileStream.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiMemoryFileStream.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\DiMemoryFileStream.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAuwEIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T18:07:31.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DiDictonary.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiDictonary.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMParser\\DiDictonary.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMParser\\DiDictonary.cs",
+              "RelativeToolTip": "Assets\\DICOMParser\\DiDictonary.cs",
+              "ViewState": "AgIAAN4DAAAAAAAAAAAjwPEDAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T06:47:21.21Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TransformController.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\TransformController.cs",
+              "RelativeDocumentMoniker": "Assets\\VolumeRendering\\Scripts\\TransformController.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\TransformController.cs",
+              "RelativeToolTip": "Assets\\VolumeRendering\\Scripts\\TransformController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:15:24.549Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "VolumeSettingsPanel.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\VolumeSettingsPanel.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\VolumeSettingsPanel.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\VolumeSettingsPanel.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\VolumeSettingsPanel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T03:36:13.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Graphic.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs",
+              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs",
+              "RelativeToolTip": "Library\\PackageCache\\com.unity.ugui@1.0.0\\Runtime\\UI\\Core\\Graphic.cs",
+              "ViewState": "AgIAAMQCAAAAAAAAAAAAALUCAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T05:59:03.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UISliderController.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\Slider\\Scripts\\UISliderController.cs",
+              "RelativeDocumentMoniker": "Assets\\Slider\\Scripts\\UISliderController.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\Slider\\Scripts\\UISliderController.cs",
+              "RelativeToolTip": "Assets\\Slider\\Scripts\\UISliderController.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAD4v3AAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T23:36:54.488Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "WindowSettingsPanel.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\WindowSettingsPanel.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\WindowSettingsPanel.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\WindowSettingsPanel.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\WindowSettingsPanel.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAjwCYAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T23:11:51.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SegmentCache.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\Segmentation\\SegmentCache.cs",
+              "RelativeDocumentMoniker": "Assets\\Segmentation\\SegmentCache.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\Segmentation\\SegmentCache.cs",
+              "RelativeToolTip": "Assets\\Segmentation\\SegmentCache.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAASwF4AAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T22:01:41.341Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SegmentConfiguration.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\SegmentConfiguration.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\SegmentConfiguration.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\SegmentConfiguration.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\SegmentConfiguration.cs",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAWwKEAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:21:23.815Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "GlobalWorkIndicator.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\GlobalWorkIndicator.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\GlobalWorkIndicator.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\GlobalWorkIndicator.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\GlobalWorkIndicator.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T05:01:17.582Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "MetaXRFeature.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs",
+              "RelativeDocumentMoniker": "Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs",
+              "RelativeToolTip": "Library\\PackageCache\\com.meta.xr.sdk.core@81.0.0\\Scripts\\OpenXRFeatures\\MetaXRFeature.cs",
+              "ViewState": "AgIAAM0AAAAAAAAAAAAjwOAAAACUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T05:58:58.833Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "MainMenu.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\MainMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\MainMenu.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\MainMenu.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\MainMenu.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAUwD0AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T22:57:15.787Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Interpolator.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\HoloToolkit\\Common\\Scripts\\Interpolator.cs",
+              "RelativeDocumentMoniker": "Assets\\HoloToolkit\\Common\\Scripts\\Interpolator.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\HoloToolkit\\Common\\Scripts\\Interpolator.cs",
+              "RelativeToolTip": "Assets\\HoloToolkit\\Common\\Scripts\\Interpolator.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T03:27:24.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Billboard.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\HoloToolkit\\Utilities\\Scripts\\Billboard.cs",
+              "RelativeDocumentMoniker": "Assets\\HoloToolkit\\Utilities\\Scripts\\Billboard.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\HoloToolkit\\Utilities\\Scripts\\Billboard.cs",
+              "RelativeToolTip": "Assets\\HoloToolkit\\Utilities\\Scripts\\Billboard.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T03:32:39.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "DelayActivation.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DelayActivation.cs",
+              "RelativeDocumentMoniker": "Assets\\DelayActivation.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DelayActivation.cs",
+              "RelativeToolTip": "Assets\\DelayActivation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T03:10:51.608Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "PixelClickHandler.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\PixelClickHandler.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\PixelClickHandler.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\PixelClickHandler.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\PixelClickHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T23:57:20.596Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ProgressHandler.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\ProgressHandler.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\ProgressHandler.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\ProgressHandler.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\ProgressHandler.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAewCIAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T22:58:39.977Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ThreadGroupState.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\Threads\\ThreadGroupState.cs",
+              "RelativeDocumentMoniker": "Assets\\Threads\\ThreadGroupState.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\Threads\\ThreadGroupState.cs",
+              "RelativeToolTip": "Assets\\Threads\\ThreadGroupState.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T19:31:43.81Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "RayMarching.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\raymarch import\\Scripts\\RayMarching.cs",
+              "RelativeDocumentMoniker": "Assets\\raymarch import\\Scripts\\RayMarching.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\raymarch import\\Scripts\\RayMarching.cs",
+              "RelativeToolTip": "Assets\\raymarch import\\Scripts\\RayMarching.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:28:55.343Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Slice2DView.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\Slice2DView.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\Slice2DView.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\Slice2DView.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\Slice2DView.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T23:47:42.53Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "OrthoSlices.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\OrthoSlices.cs",
+              "RelativeDocumentMoniker": "Assets\\DICOMViews\\OrthoSlices.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\DICOMViews\\OrthoSlices.cs",
+              "RelativeToolTip": "Assets\\DICOMViews\\OrthoSlices.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T05:16:37.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "VolumeRendering.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\VolumeRendering.cs",
+              "RelativeDocumentMoniker": "Assets\\VolumeRendering\\Scripts\\VolumeRendering.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\VolumeRendering.cs",
+              "RelativeToolTip": "Assets\\VolumeRendering\\Scripts\\VolumeRendering.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAArwEwAAAC7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:15:29.873Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "VolumeRenderingController.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\VolumeRenderingController.cs",
+              "RelativeDocumentMoniker": "Assets\\VolumeRendering\\Scripts\\VolumeRenderingController.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\VolumeRenderingController.cs",
+              "RelativeToolTip": "Assets\\VolumeRendering\\Scripts\\VolumeRenderingController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:15:35.682Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "SliceMesh.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\raymarch import\\Scripts\\SliceMesh.cs",
+              "RelativeDocumentMoniker": "Assets\\raymarch import\\Scripts\\SliceMesh.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\raymarch import\\Scripts\\SliceMesh.cs",
+              "RelativeToolTip": "Assets\\raymarch import\\Scripts\\SliceMesh.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:29:02.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Axis.cs",
+              "DocumentMoniker": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\Axis.cs",
+              "RelativeDocumentMoniker": "Assets\\VolumeRendering\\Scripts\\Axis.cs",
+              "ToolTip": "C:\\Unity Projects\\New DICOM\\Assets\\VolumeRendering\\Scripts\\Axis.cs",
+              "RelativeToolTip": "Assets\\VolumeRendering\\Scripts\\Axis.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T01:15:20.659Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
