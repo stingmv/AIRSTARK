@@ -11118,6 +11118,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RotationObjectParent
       objectReference: {fileID: 0}
+    - target: {fileID: 3292339273379810249, guid: b5e75492b5105264cb239616c46642a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3292339273806303517, guid: b5e75492b5105264cb239616c46642a0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -23347,7 +23351,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879923546}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2518c50cb3fc6a6458d4b743c2f69c7d, type: 3}
   m_Name: 
