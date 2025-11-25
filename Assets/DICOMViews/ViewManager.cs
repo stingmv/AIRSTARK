@@ -290,7 +290,7 @@ namespace DICOMViews
             VolumeRendering.SetVolume(_stack.VolumeTexture);
             StartCoroutine(_segmentCache.ApplySegments(_stack.VolumeTexture, SegmentConfiguration.Display3Ds, SegmentConfiguration.HideBase));
             VolumeRenderingParent.SetActive(true);
-            RotationObjectParent.SetActive(true);
+            //RotationObjectParent.SetActive(true);
 
             //RayMarching.initVolume(_stack.VolumeTexture);
             //Volume.SetActive(true);

@@ -32,7 +32,7 @@ QualitySettings:
     realtimeGICPUUsage: 25
     lodBias: 0.3
     maximumLODLevel: 0
-    enableLODCrossFade: 1
+    enableLODCrossFade: 0
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
     streamingMipmapsMemoryBudget: 512
@@ -180,9 +180,9 @@ QualitySettings:
     lodBias: 2
     maximumLODLevel: 0
     enableLODCrossFade: 1
-    streamingMipmapsActive: 0
+    streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 1024
     streamingMipmapsRenderersPerFrame: 512
     streamingMipmapsMaxLevelReduction: 2
     streamingMipmapsMaxFileIORequests: 1024
@@ -204,14 +204,14 @@ QualitySettings:
     excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
-    Android: 1
+    Android: 3
     Lumin: 3
     Nintendo 3DS: 3
     Nintendo Switch: 3
     PS4: 3
     PS5: 3
     PSP2: 2
-    Server: 0
+    Server: 3
     Stadia: 3
     Standalone: 3
     WebGL: 2
