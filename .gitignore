@@ -4,8 +4,11 @@
 [Bb]uild/
 [Bb]uilds/
 [Mm]emoryCaptures/
+[Uu]ser[Ss]ettings/
+[Hh]elp/
 ExportedObj/
 *.csproj
 *.sln
 *.log
 sysinfo.txt
+.vs/
