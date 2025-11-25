@@ -6,9 +6,11 @@
 [Mm]emoryCaptures/
 [Uu]ser[Ss]ettings/
 [Hh]elp/
+[Ll]ogs/
 ExportedObj/
 *.csproj
 *.sln
 *.log
 sysinfo.txt
 .vs/
+.DS_Store
