@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "2G97C5ZH4P003W",
         "name": "com.unity.template.mixedreality",
-        "processId": 1374,
+        "processId": 11212,
         "exited": false
     },
     "m_SelectedPriority": 1,
@@ -13,18 +13,6 @@
             "name": "com.oculus.vrshell",
             "processId": 2208,
             "exited": false
-        },
-        {
-            "deviceId": "2G97C5ZH4P003W",
-            "name": "com.unity.template.mixedreality",
-            "processId": 18741,
-            "exited": true
-        },
-        {
-            "deviceId": "2G97C5ZH4P003W",
-            "name": "com.unity.template.mixedreality",
-            "processId": 20202,
-            "exited": true
         },
         {
             "deviceId": "2G97C5ZH4P003W",
@@ -42,6 +30,18 @@
             "deviceId": "2G97C5ZH4P003W",
             "name": "com.unity.template.mixedreality",
             "processId": 1374,
+            "exited": true
+        },
+        {
+            "deviceId": "2G97C5ZH4P003W",
+            "name": "com.unity.template.mixedreality",
+            "processId": 10390,
+            "exited": true
+        },
+        {
+            "deviceId": "2G97C5ZH4P003W",
+            "name": "com.unity.template.mixedreality",
+            "processId": 11212,
             "exited": false
         }
     ],

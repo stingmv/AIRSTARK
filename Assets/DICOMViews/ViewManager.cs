@@ -112,7 +112,7 @@ namespace DICOMViews
             WindowSettingsPanel.gameObject.SetActive(false);
 
             VolumeRenderingParent.SetActive(false);
-            RotationObjectParent.SetActive(false);
+            RotationObjectParent.SetActive(true);
             Slice2DView.gameObject.SetActive(false);
             SegmentConfiguration.transform.gameObject.SetActive(false);
 

@@ -23,7 +23,7 @@ namespace VolumeRendering
 
         private readonly Quaternion _axis = Quaternion.identity;
 
-        public float Opacity
+        public float Opacity//hace que cada vez que cambie opacity, el shader del material actualice su opacidad
         {
             get { return _opacity; }
             set
