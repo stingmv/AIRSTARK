@@ -1,13 +1,15 @@
-﻿using DICOMParser;
+using DICOMParser;
 using Segmentation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Threads;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Events;
 
 namespace DICOMViews
 {
@@ -40,10 +42,7 @@ namespace DICOMViews
         // Internos: stack de imágenes, caché de segmentación y control de trabajo
         private ImageStack _stack;
         private SegmentCache _segmentCache;
-        //*private GlobalWorkIndicator _workIndicator;
-
-        // Lista de procesos que se están ejecutando (multi-thread)
-        private readonly List<Tuple<ThreadGroupState, string, Action>> _currentWorkloads = new List<Tuple<ThreadGroupState, string, Action>>(5);
+        private ThreadGroupState _currentWorkload;
 
         // Use this for initialization
 
@@ -130,53 +129,23 @@ namespace DICOMViews
         // Update is called once per frame
         private void Update ()
         {
-            var progress = 0;// acumulador de progreso total de la cola.
-            var index = 0;
-
-            // Recorre la lista de workloads activos para actualizar UI o remover los finalizados.
-            while (_currentWorkloads.Count > 0 && index < _currentWorkloads.Count)
-            {//Cada elemento de _currentWorkloads es una tupla (un conjunto de 3 valores).
-                var tuple = _currentWorkloads[index];
-                if (tuple.Item1.Progress == tuple.Item1.TotalProgress && tuple.Item1.Working == 0)//verifica si el trabajo ya termino
-                //tuple.Item1.Progress == tuple.Item1.TotalProgress → el progreso llegó al 100%.
-                //tuple.Item1.Working == 0 → ya no hay hilos activos trabajando.
-                {
-                    
-                    RemoveWorkload(index);//El trabajo terminó completamente: removerlo y ejecutar su callback.
-                    if (_currentWorkloads.Count > 0)//Si aún quedan trabajos después de remover uno:
-                    {
-                        MainMenu.ProgressHandler.TaskDescription = _currentWorkloads[0].Item2;//Se actualiza la descripción de la barra de progreso (TaskDescription) con el texto del nuevo trabajo en la primera posición.
-                        MainMenu.ProgressHandler.Max = _currentWorkloads[0].Item1.TotalProgress;//Se ajustan los valores Max (máximo progreso total) y Value (progreso actual).
-                        MainMenu.ProgressHandler.Value = _currentWorkloads[0].Item1.Progress;
-                        
-                        continue;//continue reinicia el ciclo sin incrementar index, porque la lista cambio de tamaño al remover un elemento
-                    }
-
-                    //Si ya no hay más trabajos, se reinicia la barra de progreso y se sale del bucle (break).
-                    MainMenu.ProgressHandler.Max = 0;
-
-                    break;
-                }
-
-                progress += tuple.Item1.Progress;//// acumula el progreso parcial del trabajo.
-                index++;
+            if (_currentWorkload != null && _currentWorkload.TotalProgress > 0)
+            {
+                MainMenu.ProgressHandler.Max = _currentWorkload.TotalProgress;
+                MainMenu.ProgressHandler.Value = _currentWorkload.Progress;
             }
-
-            MainMenu.ProgressHandler.Value = progress;//// refleja progreso total en la UI
         }
 
         /// <summary>
         /// Inicia el parseo de archivos DICOM de la carpeta seleccionada.
         /// </summary>
-        public void ParseFiles()
+        public async void ParseFiles()
         {
             // Si el usuario no seleccionó carpeta válida, salir.
             if (MainMenu.GetSelectedFolder() == MainMenu.FolderHint)
             {
                 return;
             }
-
-            //*_workIndicator.StartedWork();// muestra indicador global de trabajo.
 
             // Bloquea UI para evitar inputs mientras se cargan archivos.
             MainMenu.DisableDropDown();
@@ -186,10 +155,20 @@ namespace DICOMViews
             WindowSettingsPanel.gameObject.SetActive(false);
             SegmentConfiguration.transform.gameObject.SetActive(false);
             Debug.Log("PARSE FILES LLAMADO");
-            // Añade el trabajo de parsing a la cola, proporcionando la ruta y callback.
-            AddWorkload(_stack.StartParsingFiles(Path.Combine(Application.streamingAssetsPath, MainMenu.GetSelectedFolder())),"Cargando Archivos", OnFilesParsed);
-           
+
+            _currentWorkload = new ThreadGroupState();
+            MainMenu.ProgressHandler.TaskDescription = "Cargando Archivos";
+            MainMenu.ProgressHandler.Value = 0;
+
+            // Añade el trabajo asíncrono.
+            await _stack.StartParsingFiles(Path.Combine(Application.streamingAssetsPath, MainMenu.GetSelectedFolder()), _currentWorkload);
+            
             Debug.Log("PATH COMBINE:" + Path.Combine(Application.streamingAssetsPath, MainMenu.GetSelectedFolder()));
+
+            _currentWorkload = null;
+            MainMenu.ProgressHandler.Max = 0;
+            MainMenu.ProgressHandler.Value = 0;
+            OnFilesParsed();
         }
 
         /// <summary>
@@ -231,11 +210,18 @@ namespace DICOMViews
         /// <summary>
         /// Starts preprocessing the stored DiFiles.
         /// </summary>
-        public void PreProcessData()
+        public async void PreProcessData()
         {
-            //*_workIndicator.StartedWork();
+            _currentWorkload = new ThreadGroupState();
+            MainMenu.ProgressHandler.TaskDescription = "Preprocesamiento de Datos";
+            MainMenu.ProgressHandler.Value = 0;
 
-            AddWorkload(_stack.StartPreprocessData(), "Preprocesamiento de Datos", OnPreProcessDone);
+            await _stack.StartPreprocessData(_currentWorkload);
+
+            _currentWorkload = null;
+            MainMenu.ProgressHandler.Max = 0;
+            MainMenu.ProgressHandler.Value = 0;
+            OnPreProcessDone();
         }
 
         /// <summary>
@@ -271,15 +257,21 @@ namespace DICOMViews
         /// <summary>
         /// Starts creating a volume from the current data.
         /// </summary>
-        public void CreateVolume()
+        public async void CreateVolume()
         {
-            //*_workIndicator.StartedWork();
-
             MainMenu.DisableButtons();
-
             WindowSettingsPanel.DisableButtons();
 
-            AddWorkload(_stack.StartCreatingVolume(), "Creando Volumen", OnVolumeCreated);
+            _currentWorkload = new ThreadGroupState();
+            MainMenu.ProgressHandler.TaskDescription = "Creando Volumen";
+            MainMenu.ProgressHandler.Value = 0;
+
+            await _stack.StartCreatingVolume(_currentWorkload);
+
+            _currentWorkload = null;
+            MainMenu.ProgressHandler.Max = 0;
+            MainMenu.ProgressHandler.Value = 0;
+            OnVolumeCreated();
         }
 
         /// <summary>
@@ -304,17 +296,22 @@ namespace DICOMViews
         /// <summary>
         /// Starts creating 2D Textures for the current data.
         /// </summary>
-        public void CreateTextures()
+        public async void CreateTextures()
         {
-            //*_workIndicator.StartedWork();
-
             MainMenu.DisableButtons();
-
             WindowSettingsPanel.DisableButtons();
-
             Slice2DView.gameObject.SetActive(true);
 
-            AddWorkload(_stack.StartCreatingTextures(), "Creando Texturas", OnTexturesCreated);
+            _currentWorkload = new ThreadGroupState();
+            MainMenu.ProgressHandler.TaskDescription = "Creando Texturas";
+            MainMenu.ProgressHandler.Value = 0;
+
+            await _stack.StartCreatingTextures(_currentWorkload);
+
+            _currentWorkload = null;
+            MainMenu.ProgressHandler.Max = 0;
+            MainMenu.ProgressHandler.Value = 0;
+            OnTexturesCreated();
         }
 
         /// <summary>
@@ -386,38 +383,7 @@ namespace DICOMViews
             CreateVolume();
         }
 
-        /// <summary>
-        /// Adds a workload to be completed.
-        /// </summary>
-        /// <param name="threadGroupState">State of the workload</param>
-        /// <param name="description">Displayed description of the workload</param>
-        /// <param name="onFinished">Callback for completed work</param>
-        public void AddWorkload(ThreadGroupState threadGroupState, string description, Action onFinished)
-        {
-            _currentWorkloads.Add(new Tuple<ThreadGroupState, string, Action>(threadGroupState, description, onFinished));
 
-            if (_currentWorkloads.Count == 1)
-            {
-                MainMenu.ProgressHandler.TaskDescription = description;
-                MainMenu.ProgressHandler.Value = 0;
-            }
-
-            MainMenu.ProgressHandler.Max += threadGroupState.TotalProgress;
-        }
-
-        /// <summary>
-        /// Removes the workload at the index and calls the callback
-        /// </summary>
-        /// <param name="index">index of the workload</param>
-        private void RemoveWorkload(int index)
-        {
-            var tuple = _currentWorkloads[index];
-            tuple.Item3.Invoke();
-
-            _currentWorkloads.RemoveAt(index);
-
-            //*_workIndicator.FinishedWork();
-        }
 
     }
 }

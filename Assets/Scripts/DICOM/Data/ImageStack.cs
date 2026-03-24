@@ -1,4 +1,4 @@
-﻿using DICOMViews;
+using DICOMViews;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Threads;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,43 +59,37 @@ namespace DICOMParser
         /// <summary>
         /// Start coroutine for parsing of files.
         /// </summary>
-        public ThreadGroupState StartParsingFiles(string folderPath)//metodo que inicia corutina InitFiles
+        public async Task StartParsingFiles(string folderPath, ThreadGroupState state)
         {
             Debug.Log("START PARSING FILES");
-            ThreadGroupState state = new ThreadGroupState();//Crea un ThreadGroupState(objeto sincronizado para seguimiento de progreso)
-            StartCoroutine(InitFiles(folderPath, state));//, llama corutina
-            return state;//devuelve state para que el llamador pueda observar progreso
+            await InitFiles(folderPath, state);
         }
 
         /// <summary>
         /// Starts coroutine for preprocessing DICOM pixeldata
         /// </summary>
-        public ThreadGroupState StartPreprocessData()//inicializa el preprocessing de pixeles
+        public async Task StartPreprocessData(ThreadGroupState state)//inicializa el preprocessing de pixeles
         {
-            ThreadGroupState state = new ThreadGroupState {TotalProgress = DicomFiles.Length};//Inicializa threadGroupstate.totalprogress con numero de slices
-            PreprocessData(state);//llama metodo, internamente arrancara hilos
-            return state;
+            state.TotalProgress = DicomFiles.Length;//Inicializa threadGroupstate.totalprogress con numero de slices
+            await PreprocessData(state);//llama metodo, internamente arrancara hilos
         }
 
         /// <summary>
         /// Starts coroutine for creating the 3D texture
         /// </summary>
-        public ThreadGroupState StartCreatingVolume()
+        public async Task StartCreatingVolume(ThreadGroupState state)
         {
-            ThreadGroupState state = new ThreadGroupState {TotalProgress = DicomFiles.Length };
-            StartCoroutine(CreateVolume(state));
-
-            return state;
+            state.TotalProgress = DicomFiles.Length;
+            await CreateVolume(state);
         }
 
         /// <summary>
         /// Start coroutine for creating 2D textures.
         /// </summary>
-        public ThreadGroupState StartCreatingTextures()
+        public async Task StartCreatingTextures(ThreadGroupState state)
         {
-            ThreadGroupState state = new ThreadGroupState {TotalProgress = DicomFiles.Length + Width + Height};
-            StartCoroutine(CreateTextures(state));
-            return state;
+            state.TotalProgress = DicomFiles.Length + Width + Height;
+            await CreateTextures(state);
         }
 
 
@@ -103,13 +98,7 @@ namespace DICOMParser
         /// </summary>
         /// <param name="threadGroupState">Thread safe thread-state used to observe progress of one or multiple threads.</param>
         /// <returns>IEnumerator for usage as a coroutine</returns>
-        private static IEnumerator WaitForThreads(ThreadGroupState threadGroupState)
-        {
-            while (threadGroupState.Working > 0)
-            {
-                yield return null;
-            }
-        }
+
 
         /// <summary>
         /// Reads or tries to read files from the given folder path.
@@ -228,7 +217,7 @@ namespace DICOMParser
         /// 
 
 
-       private IEnumerator InitFiles(string folderPath, ThreadGroupState threadGroupState)
+        private async Task InitFiles(string folderPath, ThreadGroupState threadGroupState)
         {
             Debug.Log("INIT FILES");
             threadGroupState.Register();//indica que una operacion(esta corutin) empieza, incrementa contador interno de trabajo
@@ -241,7 +230,7 @@ namespace DICOMParser
             DicomFiles = new DiFile[fileNames.Count];//reserva el array DIFile con el tamaño de archivos encontrados
             threadGroupState.TotalProgress = fileNames.Count;
 
-            yield return null;
+            await Task.Yield();
 
             var zeroBased = true;
 
@@ -290,7 +279,8 @@ namespace DICOMParser
                 Debug.Log("Cargando archivo DICOM desde Android: " + path);
 
                 var www = UnityEngine.Networking.UnityWebRequest.Get(path);//UnityWebRequest.Get(path) para leer el archivo dentro del apk
-                yield return www.SendWebRequest();//espera la descarga (o lectura) asíncrona del recurso.
+                var op = www.SendWebRequest();
+                while (!op.isDone) await Task.Yield();
 
                 if (www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)//si hay un error se hace continue para saltar ese archivo y seguir con el siguiente
                 {
@@ -327,7 +317,7 @@ namespace DICOMParser
                 //IndexOutOfRangeException. Es una buena practica validar el indice antes de asignar
 
                 threadGroupState.IncrementProgress();//despues de procesar ese archivo, incrementa el progreso del threadGroupState(para la UI)
-                yield return null;//deja que Unity actualice el frame
+                await Task.Yield();//deja que Unity actualice el frame
             }
 
 
@@ -384,14 +374,9 @@ namespace DICOMParser
             }
         }
 
-        /// <summary>
-        /// Unity coroutine used to preprocess the DICOM pixel data using multiple threads.
-        /// </summary>
-        /// <param name="threadGroupState"></param>
-        /// <returns>IEnumerator for usage as a coroutine</returns>
-        private void PreprocessData(ThreadGroupState threadGroupState)
+        private async Task PreprocessData(ThreadGroupState threadGroupState)
         {
-            StartPreProcessing(threadGroupState, DicomFiles, _data, 12);
+            await StartPreProcessing(threadGroupState, DicomFiles, _data, 12);
         }
 
         /// <summary>
@@ -399,15 +384,13 @@ namespace DICOMParser
         /// </summary>
         /// <param name="threadGroupState">Thread safe thread-state used to observe progress of one or multiple threads.</param>
         /// <returns>IEnumerator for usage as a coroutine</returns>
-        private IEnumerator CreateVolume(ThreadGroupState threadGroupState)
+        private async Task CreateVolume(ThreadGroupState threadGroupState)
         {
             VolumeTexture = new Texture3D(Width, Height, DicomFiles.Length, TextureFormat.ARGB32, false);
 
             var cols = new Color32[Width * Height * DicomFiles.Length];
 
-            StartCreatingVolume(threadGroupState, DicomFiles, _data, cols, WindowWidth, WindowCenter, 6);
-
-            yield return WaitForThreads(threadGroupState);
+            await StartCreatingVolume(threadGroupState, DicomFiles, _data, cols, WindowWidth, WindowCenter, 6);
 
             VolumeTexture.SetPixels32(cols);
             VolumeTexture.Apply();
@@ -418,7 +401,7 @@ namespace DICOMParser
         /// </summary>
         /// <param name="threadGroupState">Thread safe thread-state used to observe progress of one or multiple threads.</param>
         /// <returns>IEnumerator for usage as a coroutine</returns>
-        private IEnumerator CreateTextures(ThreadGroupState threadGroupState)
+        private async Task CreateTextures(ThreadGroupState threadGroupState)
         {
 #if PRINT_USAGE
             Debug.Log(Time.time +
@@ -437,9 +420,9 @@ namespace DICOMParser
             var frontProgress = new ConcurrentQueue<int>();
             var sagProgress = new ConcurrentQueue<int>();
 
-            StartCreatingTransTextures(threadGroupState, transProgress, _data, DicomFiles, transTextureColors, WindowWidth, WindowCenter, 2);
-            StartCreatingFrontTextures(threadGroupState, frontProgress, _data, DicomFiles, frontTextureColors, WindowWidth, WindowCenter, 2);
-            StartCreatingSagTextures(threadGroupState, sagProgress, _data, DicomFiles, sagTextureColors, WindowWidth, WindowCenter, 2);
+            var t1 = StartCreatingTransTextures(threadGroupState, transProgress, _data, DicomFiles, transTextureColors, WindowWidth, WindowCenter, 2);
+            var t2 = StartCreatingFrontTextures(threadGroupState, frontProgress, _data, DicomFiles, frontTextureColors, WindowWidth, WindowCenter, 2);
+            var t3 = StartCreatingSagTextures(threadGroupState, sagProgress, _data, DicomFiles, sagTextureColors, WindowWidth, WindowCenter, 2);
 
             while (threadGroupState.Working > 0 || !(transProgress.IsEmpty && frontProgress.IsEmpty && sagProgress.IsEmpty))
             {
@@ -465,9 +448,10 @@ namespace DICOMParser
                     threadGroupState.IncrementProgress();
                 }
 
-                yield return null;
+                await Task.Yield();
             }
-
+            
+            await Task.WhenAll(t1, t2, t3);
         }
 
         /// <summary>
@@ -594,9 +578,10 @@ namespace DICOMParser
         /// <param name="files">all the DICOM files.</param>
         /// <param name="target">1D array receiving the 3D data.</param>
         /// <param name="threadCount">Amount of Threads to use.</param>
-        private void StartPreProcessing(ThreadGroupState groupState, IReadOnlyList<DiFile> files, int[] target, int threadCount)
+        private async Task StartPreProcessing(ThreadGroupState groupState, IReadOnlyList<DiFile> files, int[] target, int threadCount)
         {
             int spacing = files.Count / threadCount;
+            var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
@@ -609,12 +594,9 @@ namespace DICOMParser
                 }
 
                 groupState.Register();
-                var t = new Thread(() => PreProcess(groupState, files, Width, Height, target, startIndex, endIndex))
-                {
-                    IsBackground = true
-                };
-                t.Start();
+                tasks.Add(Task.Run(() => PreProcess(groupState, files, Width, Height, target, startIndex, endIndex)));
             }
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -674,7 +656,7 @@ namespace DICOMParser
         /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
         /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
         /// <param name="threadCount">Amount of Threads to use</param>
-        private void StartCreatingVolume(ThreadGroupState groupState, IReadOnlyList<DiFile> files, IReadOnlyList<int> data, IList<Color32> target, double windowWidth, double windowCenter, int threadCount)
+        private async Task StartCreatingVolume(ThreadGroupState groupState, IReadOnlyList<DiFile> files, IReadOnlyList<int> data, IList<Color32> target, double windowWidth, double windowCenter, int threadCount)
         {
 #if PRINT_USAGE
             Debug.Log(Time.time +
@@ -682,6 +664,7 @@ namespace DICOMParser
 #endif
 
             var spacing = files.Count / threadCount;
+            var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
@@ -694,10 +677,9 @@ namespace DICOMParser
                     endIndex = files.Count;
                 }
 
-                var t = new Thread(() => CreateVolume(groupState, data, files, Width, Height, target, windowWidth,
-                    windowCenter, startIndex, endIndex)) {IsBackground = true};
-                t.Start();
+                tasks.Add(Task.Run(() => CreateVolume(groupState, data, files, Width, Height, target, windowWidth, windowCenter, startIndex, endIndex)));
             }
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -750,10 +732,11 @@ namespace DICOMParser
         /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
         /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
         /// <param name="threadCount">Amount of Threads to use</param>
-        private void StartCreatingTransTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
+        private async Task StartCreatingTransTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
             double windowWidth, double windowCenter, int threadCount)
         {
             int spacing = files.Count / threadCount;
+            var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
@@ -766,11 +749,9 @@ namespace DICOMParser
                     endIndex = files.Count;
                 }
 
-                var t = new Thread(() => CreateTransTextures(groupState, processed, data, Width, Height, files,
-                    target,
-                    windowWidth, windowCenter, startIndex, endIndex)) {IsBackground = true};
-                t.Start();
+                tasks.Add(Task.Run(() => CreateTransTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
             }
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -812,10 +793,11 @@ namespace DICOMParser
         /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
         /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
         /// <param name="threadCount">Amount of Threads to use</param>
-        private void StartCreatingFrontTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
+        private async Task StartCreatingFrontTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
             double windowWidth, double windowCenter, int threadCount)
         {
             int spacing = Height / threadCount;
+            var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
@@ -828,11 +810,9 @@ namespace DICOMParser
                     endIndex = Height;
                 }
 
-                var t = new Thread(() => CreateFrontTextures(groupState, processed, data, Width, Height, files,
-                    target,
-                    windowWidth, windowCenter, startIndex, endIndex)) {IsBackground = true};
-                t.Start();
+                tasks.Add(Task.Run(() => CreateFrontTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
             }
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -874,10 +854,11 @@ namespace DICOMParser
         /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
         /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
         /// <param name="threadCount">Amount of Threads to use</param>
-        private void StartCreatingSagTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
+        private async Task StartCreatingSagTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
             double windowWidth, double windowCenter, int threadCount)
         {
             int spacing = Width / threadCount;
+            var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
@@ -890,10 +871,9 @@ namespace DICOMParser
                     endIndex = Width;
                 }
 
-                var t = new Thread(() => CreateSagTextures(groupState, processed, data, Width, Height, files, target,
-                    windowWidth, windowCenter, startIndex, endIndex)) {IsBackground = true};
-                t.Start();
+                tasks.Add(Task.Run(() => CreateSagTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
             }
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
