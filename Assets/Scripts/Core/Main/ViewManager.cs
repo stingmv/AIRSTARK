@@ -152,9 +152,7 @@ namespace DICOMViews
             }
 
             // Bloquea UI para evitar inputs mientras se cargan archivos.
-            MainMenu.DisableDropDown();
-            WindowSettingsPanel.DisableButtons();
-            MainMenu.DisableButtons();
+            global::Events.DicomEventBus.OnDicomProcessingStart?.Invoke();
 
             WindowSettingsPanel.gameObject.SetActive(false);
             SegmentConfiguration.transform.gameObject.SetActive(false);
@@ -233,10 +231,7 @@ namespace DICOMViews
         /// </summary>
         private void OnPreProcessDone()
         {
-            WindowSettingsPanel.EnableButtons();
-
-            MainMenu.EnableButtons();
-            MainMenu.EnableDropDown();
+            global::Events.DicomEventBus.OnDicomProcessingComplete?.Invoke();
             var preview = MainMenu.PreviewImage.texture as Texture2D;
 
             if (!preview || preview.width != _stack.Width || preview.height != _stack.Height)
@@ -264,8 +259,7 @@ namespace DICOMViews
         /// </summary>
         public async void CreateVolume()
         {
-            MainMenu.DisableButtons();
-            WindowSettingsPanel.DisableButtons();
+            global::Events.DicomEventBus.OnDicomProcessingStart?.Invoke();
 
             _currentWorkload = new ThreadGroupState();
             MainMenu.ProgressHandler.TaskDescription = "Creando Volumen";
@@ -292,8 +286,7 @@ namespace DICOMViews
             //RayMarching.initVolume(_stack.VolumeTexture);
             //Volume.SetActive(true);
 
-            MainMenu.EnableButtons();
-            WindowSettingsPanel.EnableButtons();
+            global::Events.DicomEventBus.OnDicomProcessingComplete?.Invoke();
 
             //*_workIndicator.FinishedWork();
         }
@@ -303,8 +296,7 @@ namespace DICOMViews
         /// </summary>
         public async void CreateTextures()
         {
-            MainMenu.DisableButtons();
-            WindowSettingsPanel.DisableButtons();
+            global::Events.DicomEventBus.OnDicomProcessingStart?.Invoke();
             Slice2DView.gameObject.SetActive(true);
 
             _currentWorkload = new ThreadGroupState();
@@ -326,8 +318,7 @@ namespace DICOMViews
         {
             //*_workIndicator.FinishedWork();
 
-            MainMenu.EnableButtons();
-            WindowSettingsPanel.EnableButtons();
+            global::Events.DicomEventBus.OnDicomProcessingComplete?.Invoke();
 
             StartCoroutine(_segmentCache.ApplyTextures(SegmentConfiguration.Display2Ds, true));
         }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -90,6 +90,30 @@ namespace DICOMViews
         public void EnableDropDown()
         {
             _selection.interactable = true;
+        }
+
+        private void OnEnable()
+        {
+            global::Events.DicomEventBus.OnDicomProcessingStart += OnProcessingStart;
+            global::Events.DicomEventBus.OnDicomProcessingComplete += OnProcessingComplete;
+        }
+
+        private void OnDisable()
+        {
+            global::Events.DicomEventBus.OnDicomProcessingStart -= OnProcessingStart;
+            global::Events.DicomEventBus.OnDicomProcessingComplete -= OnProcessingComplete;
+        }
+
+        private void OnProcessingStart()
+        {
+            DisableButtons();
+            DisableDropDown();
+        }
+
+        private void OnProcessingComplete()
+        {
+            EnableButtons();
+            EnableDropDown();
         }
     }
 }

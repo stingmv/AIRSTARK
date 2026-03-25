@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using DICOMViews.Events;
@@ -145,6 +145,18 @@ namespace DICOMViews
         {
             LoadVolume.interactable = true;
             LoadTextures.interactable = true;
+        }
+
+        private void OnEnable()
+        {
+            global::Events.DicomEventBus.OnDicomProcessingStart += DisableButtons;
+            global::Events.DicomEventBus.OnDicomProcessingComplete += EnableButtons;
+        }
+
+        private void OnDisable()
+        {
+            global::Events.DicomEventBus.OnDicomProcessingStart -= DisableButtons;
+            global::Events.DicomEventBus.OnDicomProcessingComplete -= EnableButtons;
         }
     }
 }

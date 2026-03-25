@@ -16,5 +16,11 @@ namespace Events
         
         // Se llama cuando se produce un error grave (ej en la recarga)
         public static Action<string> OnError;
+
+        // Se llama al iniciar el pipeline de DICOM, deshabilitando la IU interactiva
+        public static Action OnDicomProcessingStart;
+        
+        // Se llama al finalizar exitosamente la carga y creación del volumen
+        public static Action OnDicomProcessingComplete;
     }
 }
