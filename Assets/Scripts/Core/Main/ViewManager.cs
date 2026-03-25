@@ -1,4 +1,4 @@
-using DICOMParser;
+﻿using DICOMParser;
 using Segmentation;
 using System;
 using System.Collections;
@@ -248,7 +248,8 @@ namespace DICOMViews
 
             var pixels = preview.GetPixels32();
 
-            ImageStack.FillPixelsTransversal(_stack.Slices/2, _stack.GetData(), _stack.Width, _stack.Height, _stack.DicomFiles, pixels);
+            var strategy = DICOMViews.Strategies.SliceStrategyFactory.GetStrategy(SliceType.Transversal);
+            strategy.FillPixels(_stack.Slices/2, _stack.GetData(), _stack.Width, _stack.Height, _stack.DicomFiles, pixels, DICOMParser.TransferFunction.Identity, _stack.WindowWidth, _stack.WindowCenter);
 
             preview.SetPixels32(pixels);
             preview.Apply();

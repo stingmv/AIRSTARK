@@ -10,6 +10,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Threads;
 using UnityEngine;
+
+using DICOMViews.Loaders;
+using DICOMViews.Strategies;
+
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -280,9 +284,9 @@ namespace DICOMParser
             var frontProgress = new ConcurrentQueue<int>();
             var sagProgress = new ConcurrentQueue<int>();
 
-            var t1 = StartCreatingTransTextures(threadGroupState, transProgress, _data, DicomFiles, transTextureColors, WindowWidth, WindowCenter, 2);
-            var t2 = StartCreatingFrontTextures(threadGroupState, frontProgress, _data, DicomFiles, frontTextureColors, WindowWidth, WindowCenter, 2);
-            var t3 = StartCreatingSagTextures(threadGroupState, sagProgress, _data, DicomFiles, sagTextureColors, WindowWidth, WindowCenter, 2);
+            var t1 = StartCreatingSlices(threadGroupState, transProgress, SliceType.Transversal, _data, DicomFiles, transTextureColors, WindowWidth, WindowCenter, 2);
+            var t2 = StartCreatingSlices(threadGroupState, frontProgress, SliceType.Frontal, _data, DicomFiles, frontTextureColors, WindowWidth, WindowCenter, 2);
+            var t3 = StartCreatingSlices(threadGroupState, sagProgress, SliceType.Sagittal, _data, DicomFiles, sagTextureColors, WindowWidth, WindowCenter, 2);
 
             while (threadGroupState.Working > 0 || !(transProgress.IsEmpty && frontProgress.IsEmpty && sagProgress.IsEmpty))
             {
@@ -580,318 +584,37 @@ namespace DICOMParser
 
             groupState.Done();
         }
-
-        /// <summary>
-        /// Starts threads for transversal texture creation.
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="threadCount">Amount of Threads to use</param>
-        private async Task StartCreatingTransTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
-            double windowWidth, double windowCenter, int threadCount)
+        private async Task StartCreatingSlices(ThreadGroupState groupState, ConcurrentQueue<int> processed, SliceType type, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target, double windowWidth, double windowCenter, int threadCount)
         {
-            int spacing = files.Count / threadCount;
+            var strategy = SliceStrategyFactory.GetStrategy(type);
+            int maxIndex = strategy.GetMaxIndex(Width, Height, files.Count);
+            int spacing = maxIndex / threadCount;
             var tasks = new System.Collections.Generic.List<Task>();
 
             for (var i = 0; i < threadCount; ++i)
             {
                 groupState.Register();
                 var startIndex = i * spacing;
-                var endIndex = startIndex + spacing;
+                var endIndex = (i + 1 == threadCount) ? maxIndex : startIndex + spacing;
 
-                if (i + 1 == threadCount)
-                {
-                    endIndex = files.Count;
-                }
-
-                tasks.Add(Task.Run(() => CreateTransTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
+                tasks.Add(Task.Run(() => CreateSlices(strategy, groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
             }
             await Task.WhenAll(tasks);
         }
 
-        /// <summary>
-        /// Fills the target color array with the pixels for all transversal images in range from start to end (excluding end).
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="width">width of a transversal image.</param>
-        /// <param name="height">height of a transversal image.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="start">Start index used to determine partition of images to be computed</param>
-        /// <param name="end">End index used to determine upper bound of partition of images to be computed</param>
-        private static void CreateTransTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, int width, int height, IReadOnlyList<DiFile> files, 
-            IList<Color32[]> target, double windowWidth, double windowCenter, int start, int end)
+        private static void CreateSlices(ISliceStrategy strategy, ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, int width, int height, IReadOnlyList<DiFile> files, IList<Color32[]> target, double windowWidth, double windowCenter, int start, int end)
         {
-            for (var layer = start; layer < end; ++layer)
+            int targetWidth = strategy.GetTargetWidth(width, height, files.Count);
+            int targetHeight = strategy.GetTargetHeight(width, height, files.Count);
+
+            for (var i = start; i < end; ++i)
             {
-                target[layer] = new Color32[width*height];
-                FillPixelsTransversal(layer, data, width, height, files, target[layer], TransferFunction.Identity, windowWidth, windowCenter);
-                processed.Enqueue(layer);
+                target[i] = new Color32[targetWidth * targetHeight];
+                strategy.FillPixels(i, data, width, height, files, target[i], TransferFunction.Identity, windowWidth, windowCenter);
+                processed.Enqueue(i);
                 Thread.Sleep(5);
             }
-
             groupState.Done();
-        }
-
-        /// <summary>
-        /// Starts threads for frontal texture creation.
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="threadCount">Amount of Threads to use</param>
-        private async Task StartCreatingFrontTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
-            double windowWidth, double windowCenter, int threadCount)
-        {
-            int spacing = Height / threadCount;
-            var tasks = new System.Collections.Generic.List<Task>();
-
-            for (var i = 0; i < threadCount; ++i)
-            {
-                groupState.Register();
-                var startIndex = i * spacing;
-                var endIndex = startIndex + spacing;
-
-                if (i + 1 == threadCount)
-                {
-                    endIndex = Height;
-                }
-
-                tasks.Add(Task.Run(() => CreateFrontTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
-            }
-            await Task.WhenAll(tasks);
-        }
-
-        /// <summary>
-        /// Fills the target color array with the pixels for all frontal images in range from start to end (excluding end).
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="width">width of a transversal image.</param>
-        /// <param name="height">height of a transversal image.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="start">Start index used to determine partition of images to be computed</param>
-        /// <param name="end">End index used to determine upper bound of partition of images to be computed</param>
-        private static void CreateFrontTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, int width, int height, IReadOnlyList<DiFile> files, IList<Color32[]> target,
-            double windowWidth, double windowCenter, int start, int end)
-        {
-            for (var y = start; y < end; ++y)
-            {
-                target[y] = new Color32[width * files.Count];
-                FillPixelsFrontal(y, data, width, height, files, target[y], TransferFunction.Identity, windowWidth, windowCenter);
-                processed.Enqueue(y);
-                Thread.Sleep(5);
-            }
-
-            groupState.Done();
-        }
-
-        /// <summary>
-        /// Starts threads for sagittal texture creation.
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="threadCount">Amount of Threads to use</param>
-        private async Task StartCreatingSagTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, IReadOnlyList<DiFile> files, IList<Color32[]> target,
-            double windowWidth, double windowCenter, int threadCount)
-        {
-            int spacing = Width / threadCount;
-            var tasks = new System.Collections.Generic.List<Task>();
-
-            for (var i = 0; i < threadCount; ++i)
-            {
-                groupState.Register();
-                var startIndex = i * spacing;
-                var endIndex = startIndex + spacing;
-
-                if (i + 1 == threadCount)
-                {
-                    endIndex = Width;
-                }
-
-                tasks.Add(Task.Run(() => CreateSagTextures(groupState, processed, data, Width, Height, files, target, windowWidth, windowCenter, startIndex, endIndex)));
-            }
-            await Task.WhenAll(tasks);
-        }
-
-        /// <summary>
-        /// Fills the target color array with the pixels for all saggital images in range from start to end (excluding end).
-        /// </summary>
-        /// <param name="groupState">synchronized Threadstate used to observe progress of one or multiple threads.</param>
-        /// <param name="processed">synchronized queue which will be filled with each image index, that is ready.</param>
-        /// <param name="data">pixel intensity values in a 3D Array mapped to a 1D Array.</param>
-        /// <param name="width">width of a transversal image.</param>
-        /// <param name="height">height of a transversal image.</param>
-        /// <param name="files">all the DICOM files.</param>
-        /// <param name="target">target jagged array, which the result will be written to.</param>
-        /// <param name="windowWidth">Option to set custom windowWidth, Double.MinValue to not use it</param>
-        /// <param name="windowCenter">Option to set custom windowCenter, Double.MinValue to not use it</param>
-        /// <param name="start">Start index used to determine partition of images to be computed</param>
-        /// <param name="end">End index used to determine upper bound of partition of images to be computed</param>
-        private static void CreateSagTextures(ThreadGroupState groupState, ConcurrentQueue<int> processed, int[] data, int width, int height, IReadOnlyList<DiFile> files, IList<Color32[]> target,
-            double windowWidth, double windowCenter, int start, int end)
-        {
-            for (var x = start; x < end; ++x)
-            {
-                target[x] = new Color32[height * files.Count];
-                FillPixelsSagittal(x, data, width, height, files, target[x], TransferFunction.Identity, windowWidth, windowCenter);
-                processed.Enqueue(x);
-                Thread.Sleep(5);
-            }
-
-            groupState.Done();
-        }
-
-        /// <summary>
-        /// Wrapper for simple calls without specific shader or windowwidth/Center
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        public static void FillPixelsTransversal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData)
-        {
-            FillPixelsTransversal(id, data, width, height, files, texData, TransferFunction.Identity);
-        }
-
-        /// <summary>
-        /// Fills a Color32 Array with transversal texture data from the pixelIntensity values given by the data array.
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        /// <param name="pShader">pixel shader to be applied to every pixel</param>
-        /// <param name="windowWidth">Optional possibility to override windowWidth</param>
-        /// <param name="windowCenter">Optional possibility to override windowCenter</param>
-        public static void FillPixelsTransversal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData,
-            Func<Color32, Color32> pShader, double windowWidth = double.MinValue, double windowCenter = double.MinValue)
-        {
-            var idxPartId = id * width * height;
-            var file = files[id];
-
-            for (var y = 0; y < height; ++y)
-            {
-                var idxPart = idxPartId + y * width;
-                for (var x = 0; x < width; ++x)
-                {
-                    var index = y * width + x;
-
-                    texData[index] = pShader(GetRGBValue(data[idxPart + x], file, windowWidth, windowCenter));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Wrapper for simple calls without specific shader or windowwidth/Center
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        public static void FillPixelsFrontal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData)
-        {
-            FillPixelsFrontal(id, data, width, height, files, texData, TransferFunction.Identity);
-        }
-
-        /// <summary>
-        /// Fills a Color32 Array with frontal texture data from the pixelIntensity values given by the data array.
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        /// <param name="pShader">pixel shader to be applied to every pixel</param>
-        /// <param name="windowWidth">Optional possibility to override windowWidth</param>
-        /// <param name="windowCenter">Optional possibility to override windowCenter</param>
-        public static void FillPixelsFrontal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData,
-            Func<Color32, Color32> pShader, double windowWidth = double.MinValue, double windowCenter = double.MinValue)
-        {
-            for (var i = 0; i < files.Count; ++i)
-            {
-                var idxPart = i * width * height + id * width;
-                var file = files[i];
-
-                for (var x = 0; x < width; ++x)
-                {
-                    var index = i * height + x;
-
-                    texData[index] = pShader(GetRGBValue(data[idxPart + x], file, windowWidth, windowCenter));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Wrapper for simple calls without specific shader or windowwidth/Center
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        public static void FillPixelsSagittal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData)
-        {
-            FillPixelsSagittal(id, data, width, height, files, texData, TransferFunction.Identity);
-        }
-
-        /// <summary>
-        /// Fills a Color32 Array with sagittal texture data from the pixelIntensity values given by the data array.
-        /// </summary>
-        /// <param name="id">Image number</param>
-        /// <param name="data">3D Pixel intensity data</param>
-        /// <param name="width">transversal slice width</param>
-        /// <param name="height">transversal slice height</param>
-        /// <param name="files">array of all DICOM files</param>
-        /// <param name="texData">target texture array</param>
-        /// <param name="pShader">pixel shader to be applied to every pixel</param>
-        /// <param name="windowWidth">Optional possibility to override windowWidth</param>
-        /// <param name="windowCenter">Optional possibility to override windowCenter</param>
-        public static void FillPixelsSagittal(int id, int[] data, int width, int height, IReadOnlyList<DiFile> files, Color32[] texData,
-            Func<Color32, Color32> pShader, double windowWidth = double.MinValue, double windowCenter = double.MinValue)
-        {
-            for (var i = 0; i < files.Count; ++i)
-            {
-                var idxPart = i * width * height + id;
-                var file = files[i];
-
-                for (var y = 0; y < height; ++y)
-                {
-                    var index = i * width + y;
-
-                    texData[index] = pShader(GetRGBValue(data[idxPart + y*width], file, windowWidth, windowCenter));
-                }
-            }
         }
 
         /// <summary>
@@ -920,7 +643,7 @@ namespace DICOMParser
         /// <param name="windowWidth">Option to set own window width</param>
         /// <param name="windowCenter">Option to set own window center</param>
         /// <returns>The resulting Color</returns>
-        private static Color32 GetRGBValue(int pixelIntensity, DiFile file, double windowWidth = double.MinValue,
+        public static Color32 GetRGBValue(int pixelIntensity, DiFile file, double windowWidth = double.MinValue,
             double windowCenter = double.MinValue)
         {
             var bitsStored = file.GetBitsStored();
