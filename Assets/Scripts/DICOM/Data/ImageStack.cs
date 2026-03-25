@@ -100,251 +100,36 @@ namespace DICOMParser
         /// <returns>IEnumerator for usage as a coroutine</returns>
 
 
-        /// <summary>
-        /// Reads or tries to read files from the given folder path.
-        /// </summary>
-        /// <param name="folderPath"></param>
-        /// <returns></returns>
-        /// 
-
-
-        private static List<string> GetFiles(string folderPath)
-        {
-            var fileNames = new List<string>();
-
-#if UNITY_EDITOR
-
-            Debug.Log("UNITY EDITOR DIRECTIVA COMP");
-            var files = Directory.GetFiles(folderPath);
-            for (var index = 0; index < files.Length; index++)
-            {
-                var file = files[index];
-                if (UnityEngine.Windows.File.Exists(file) && (file.EndsWith(".dcm") || !file.Contains(".")))
-                {
-                    fileNames.Add(file);
-                }
-            }
-
-#elif UNITY_ANDROID//SE EJECUTA CUANDO SE ESTA COMPILANDO PARA ANDROID
-
-            // ===============================
-            // ANDROID / META QUEST 3
-            // Usa index.txt para obtener la lista de archivos
-            // ===============================
-            Debug.Log("ANDROID DIRECTIVA COMP");
-            string indexPath = System.IO.Path.Combine(folderPath, "index.txt");
-
-            UnityEngine.Debug.Log("ANDROID GetFiles → Leyendo index: " + indexPath);
-
-            // Android NO puede leer archivos directo → usar UnityWebRequest
-            var www = UnityEngine.Networking.UnityWebRequest.Get(indexPath);
-            var op = www.SendWebRequest();
-
-            while (!op.isDone) { } // Esperamos
-
-            if (www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
-            {
-                UnityEngine.Debug.LogError("ERROR: No se pudo cargar index.txt en Android: " + indexPath);
-                return fileNames;
-            }
-
-            string content = www.downloadHandler.text;
-            UnityEngine.Debug.Log("Contenido index.txt:\n" + content);
-
-            // Separamos líneas
-            string[] lines = content.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var line in lines)
-            {
-                // Quitar espacios en blanco/CRLF
-                string clean = line.Trim();
-
-                if (string.IsNullOrWhiteSpace(clean))
-                    continue;
-
-                // Combinamos ruta final
-                string fullPath = System.IO.Path.Combine(folderPath, clean);
-                fileNames.Add(fullPath);
-
-                UnityEngine.Debug.Log("Agregado archivo: " + fullPath);
-            }
-
-#elif UNITY_WSA
-
-            Debug.Log("UNITY WSA DIRECTIVA COMP");
-
-            var formats = new[]{folderPath + "/CTHd" + "{0:D3}",
-                folderPath + "/CTHd" + "{0:D3}.dcm",
-                folderPath + "/{0:D6}",
-                folderPath + "/{0:D6}.dcm"
-            };
-
-            foreach (var format in formats)
-            {
-                var pos = 0;
-
-                while (UnityEngine.Windows.File.Exists(string.Format(format, pos)))
-                {
-                    fileNames.Add(string.Format(format, pos));
-                    ++pos;
-                }
-
-                if (fileNames.Count > 0)
-                {
-                    break;
-                }
-
-                pos = 1;
-
-                while (UnityEngine.Windows.File.Exists(string.Format(format, pos)))
-                {
-                    fileNames.Add(string.Format(format, pos));
-                    ++pos;
-                }
-            }
-#endif
-
-            return fileNames;
-        }
-
-
-        /// <summary>
-        /// Unity coroutine for loading the selected folder of files.
-        /// </summary>
-        /// <param name="folderPath">Path of the folder containing the DICOM files</param>
-        /// <param name="threadGroupState">Thread safe thread-state used to observe progress of one or multiple threads.</param>
-        /// <returns>IEnumerator for usage as a coroutine</returns>
-        /// 
-
-
         private async Task InitFiles(string folderPath, ThreadGroupState threadGroupState)
         {
             Debug.Log("INIT FILES");
-            threadGroupState.Register();//indica que una operacion(esta corutin) empieza, incrementa contador interno de trabajo
-            //string[] filePaths = Directory.GetFiles(folderPath);
-
-            //filePaths = Array.FindAll(filePaths, HasNoExtension); 
-            var fileNames = GetFiles(folderPath);//obtiene la lista de archivos
-
-
-            DicomFiles = new DiFile[fileNames.Count];//reserva el array DIFile con el tamaño de archivos encontrados
-            threadGroupState.TotalProgress = fileNames.Count;
-
-            await Task.Yield();
-
-            var zeroBased = true;
-
-            //CORROBORANDO LECTURA:--------------------
-            Debug.Log("FOLDERPATH = " + folderPath);
-            Debug.Log("FILE COUNT = " + fileNames.Count);
-            foreach (var f in fileNames)
-            {
-                Debug.Log("FILE: " + f);
-            }
-            //------------------------------------------
-
-
-            /*
-            foreach (var path in fileNames)
-            {
-                var diFile = new DiFile();
-                diFile.InitFromFile(path);
-
-                if (zeroBased && diFile.GetImageNumber() == DicomFiles.Length)
-                {
-                    ShiftLeft(DicomFiles);
-                    zeroBased = false;
-                }
-
-                if (zeroBased)
-                {
-                    DicomFiles[diFile.GetImageNumber()] = diFile;
-                }
-                else
-                {
-                    DicomFiles[diFile.GetImageNumber() - 1] = diFile;
-                }
-
-                threadGroupState.IncrementProgress();
-                yield return null;
-            }*/
-
+            threadGroupState.Register();
             
-            foreach (var path in fileNames)//recorre todos las rutas leidas
+            var loader = DICOMViews.Loaders.DicomLoaderFactory.CreateLoader();
+            DicomFiles = await loader.LoadFilesAsync(folderPath, threadGroupState);
+
+            if (DicomFiles.Length == 0)
             {
-                var diFile = new DiFile();//crea una instancia nueva de DiFile para cargar/parsing del DICOM
-
-#if UNITY_ANDROID && !UNITY_EDITOR//solo en android y no en editor
-
-                Debug.Log("Cargando archivo DICOM desde Android: " + path);
-
-                var www = UnityEngine.Networking.UnityWebRequest.Get(path);//UnityWebRequest.Get(path) para leer el archivo dentro del apk
-                var op = www.SendWebRequest();
-                while (!op.isDone) await Task.Yield();
-
-                if (www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)//si hay un error se hace continue para saltar ese archivo y seguir con el siguiente
-                {
-                    Debug.LogError("Error cargando archivo en Android: " + path + " → " + www.error);
-                    continue;
-                }
-
-                byte[] dicomBytes = www.downloadHandler.data;//si funciona, obtiene byte[] dicomBytes
-
-                // 👇 ESTE MÉTODO LO DEBES CREAR EN TU DiFile
-                diFile.InitFromBytes(dicomBytes);
-
-#else
-                // En PC funciona normal
-                diFile.InitFromFile(path);
-#endif
-                //Logica para detectar si las imagenes estan numeradas de 1 a N, en lugar de 0 a N-1
-                if (zeroBased && diFile.GetImageNumber() == DicomFiles.Length)
-                {
-                    ShiftLeft(DicomFiles);//si empieza en 1 desplaza todo el array a la izquierda
-                    zeroBased = false;//para ajustarse a la numeracion 1-based
-                }
-
-                //inserta la diFile en el indice correcto del array DicomFiles
-                if (zeroBased)
-                {
-                    DicomFiles[diFile.GetImageNumber()] = diFile;
-                }
-                else
-                {
-                    DicomFiles[diFile.GetImageNumber() - 1] = diFile;
-                }
-                //si diFile.GetImageNumber() devuelve un valor fuera de rango(negativo o >=DicomFiles.Length) se lanzara
-                //IndexOutOfRangeException. Es una buena practica validar el indice antes de asignar
-
-                threadGroupState.IncrementProgress();//despues de procesar ese archivo, incrementa el progreso del threadGroupState(para la UI)
-                await Task.Yield();//deja que Unity actualice el frame
+                Debug.LogError("No DICOM files were loaded.");
+                threadGroupState.Done();
+                return;
             }
 
-
-            //tomamos dimensiones desde el primer Difile del array
             Width = DicomFiles[0].GetImageWidth();
             Height = DicomFiles[0].GetImageHeight();
+            _data = new int[DicomFiles.Length * Width * Height];
 
-            _data = new int[DicomFiles.Length * Width * Height];//Reserva el array _data donde
-                                                                //se almacenará el volumen (flattened 3D array): cantidad de slices × ancho × alto.
+            VolumeTexture = null;
 
-            VolumeTexture = null;//Resetea la Texture3D (se recreará después).
-
-            //Lee los presets de ventana (Window Center / Window Width) desde los DataElements DICOM del primer archivo.
-            //Usa el operador ?. para evitar NullReference
             WindowCenterPresets = DicomFiles[0].GetElement(0x0028, 0x1050)?.GetDoubles() ?? new[] { double.MinValue };
             WindowWidthPresets = DicomFiles[0].GetElement(0x0028, 0x1051)?.GetDoubles() ?? new[] { double.MinValue };
-
-            //Inicializa los valores actuales de WindowCenter y WindowWidth usando el primer preset.
             WindowCenter = WindowCenterPresets[0];
             WindowWidth = WindowWidthPresets[0];
 
-
-            //Lee elementos DICOM para MinPixelIntensity y MaxPixelIntensity.
             MinPixelIntensity = (int)(DicomFiles[0].GetElement(0x0028, 0x1052)?.GetDouble() ?? 0d);
-            MaxPixelIntensity = (int)((DicomFiles[0].GetElement(0x0028, 0x1053)?.GetDouble() ?? 1d) * (Math.Pow(2, DicomFiles[0].GetBitsStored()) - 1) + MinPixelIntensity);//calcula un tope basado en bits almacenados y la escala (formula habitual en DICOM).
+            MaxPixelIntensity = (int)((DicomFiles[0].GetElement(0x0028, 0x1053)?.GetDouble() ?? 1d) * (System.Math.Pow(2, DicomFiles[0].GetBitsStored()) - 1) + MinPixelIntensity);
 
-            threadGroupState.Done();//Marca la operación como completada en threadGroupState
+            threadGroupState.Done();
         }
 
        
@@ -361,18 +146,7 @@ namespace DICOMParser
             WindowCenter = windowCenter;
         }
 
-        /// <summary>
-        /// Shifts every element in the given list to the left.
-        /// </summary>
-        /// <typeparam name="T">Type of the list</typeparam>
-        /// <param name="array">List to be modified</param>
-        private static void ShiftLeft<T>(IList<T> array)
-        {
-            for (var i = 1; i < array.Count; i++)
-            {
-                array[i - 1] = array[i];
-            }
-        }
+
 
         private async Task PreprocessData(ThreadGroupState threadGroupState)
         {
