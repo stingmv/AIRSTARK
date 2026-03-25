@@ -25,7 +25,7 @@ namespace DICOMParser
 
         private int[] _data;//almacenara valores de intensidad de volumen 3D->1D
 
-        //arreglos que guardan las Texture2D generadas para cada plano (trasnversal,frontal y sagital)
+        public ComputeShader DicomComputeShader;
         private Texture2D[] _transversalTexture2Ds;
         private Texture2D[] _frontalTexture2Ds;
         private Texture2D[] _sagittalTexture2Ds;
@@ -390,10 +390,96 @@ namespace DICOMParser
 
             var cols = new Color32[Width * Height * DicomFiles.Length];
 
-            await StartCreatingVolume(threadGroupState, DicomFiles, _data, cols, WindowWidth, WindowCenter, 6);
+            if (DicomComputeShader != null)
+            {
+                await StartCreatingVolumeGPU(threadGroupState, cols);
+            }
+            else
+            {
+                await StartCreatingVolume(threadGroupState, DicomFiles, _data, cols, WindowWidth, WindowCenter, 6);
+            }
 
             VolumeTexture.SetPixels32(cols);
             VolumeTexture.Apply();
+        }
+
+        private async Task StartCreatingVolumeGPU(ThreadGroupState groupState, Color32[] target)
+        {
+            groupState?.Register();
+            int totalPixels = target.Length;
+            
+            ComputeBuffer dataBuffer = new ComputeBuffer(_data.Length, sizeof(int));
+            dataBuffer.SetData(_data);
+            
+            ComputeBuffer colorBuffer = new ComputeBuffer(totalPixels, sizeof(uint)); // Color32 es equivalente a uint de 32 bits
+
+            int kernelIdx = DicomComputeShader.FindKernel("ProcessVolume");
+            DicomComputeShader.SetBuffer(kernelIdx, "DataBuffer", dataBuffer);
+            DicomComputeShader.SetBuffer(kernelIdx, "ResultColors", colorBuffer);
+            DicomComputeShader.SetInt("Width", Width);
+            DicomComputeShader.SetInt("Height", Height);
+            DicomComputeShader.SetInt("Depth", DicomFiles.Length);
+            float effectiveWindowWidth = (float)WindowWidth;
+            float effectiveWindowCenter = (float)WindowCenter;
+
+            if (WindowCenter <= double.MinValue || WindowWidth <= double.MinValue)
+            {
+                var file = DicomFiles[0];
+                var centerEl = file.GetElement(0x0028, 0x1050);
+                var widthEl = file.GetElement(0x0028, 0x1051);
+
+                if (centerEl != null && widthEl != null)
+                {
+                    effectiveWindowCenter = (float)centerEl.GetDouble();
+                    effectiveWindowWidth = (float)widthEl.GetDouble();
+                }
+                else
+                {
+                    int bitsStored = file.GetBitsStored();
+                    var interceptEl = file.GetElement(0x0028, 0x1052);
+                    var slopeEl = file.GetElement(0x0028, 0x1053);
+                    double intercept = interceptEl?.GetDouble() ?? 0;
+                    double slope = slopeEl?.GetDouble() ?? 1;
+
+                    double oldMax = System.Math.Pow(2, bitsStored) * slope + intercept;
+                    double oRange = oldMax - intercept;
+
+                    effectiveWindowWidth = (float)oRange;
+                    effectiveWindowCenter = (float)(intercept + oRange / 2.0);
+                }
+            }
+
+            DicomComputeShader.SetFloat("WindowWidth", effectiveWindowWidth);
+            DicomComputeShader.SetFloat("WindowCenter", effectiveWindowCenter);
+
+            int tX = Mathf.CeilToInt(Width / 8f);
+            int tY = Mathf.CeilToInt(Height / 8f);
+            int tZ = Mathf.CeilToInt(DicomFiles.Length / 8f);
+
+            DicomComputeShader.Dispatch(kernelIdx, tX, tY, tZ);
+
+            var request = UnityEngine.Rendering.AsyncGPUReadback.Request(colorBuffer);
+            while (!request.done)
+            {
+                await Task.Yield();
+            }
+
+            if (!request.hasError)
+            {
+                var nativeArray = request.GetData<Color32>();
+                nativeArray.CopyTo(target);
+            }
+            else
+            {
+                Debug.LogError("Error recuperando memoria de GPU en DicomComputeShader");
+            }
+
+            dataBuffer.Release();
+            colorBuffer.Release();
+
+            groupState.TotalProgress = 1;
+            groupState?.IncrementProgress();
+            groupState?.Done();
         }
 
         /// <summary>

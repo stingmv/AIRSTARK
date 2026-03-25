@@ -33,7 +33,7 @@ public class RayMarching : MonoBehaviour
 	private Material _rayMarchMaterial;
 	private Material _compositeMaterial;
 	private Camera _ppCamera;
-	private Texture3D _volumeBuffer;
+	private Texture _volumeBuffer;
 
 	private void Awake()
 	{
@@ -130,7 +130,7 @@ public class RayMarching : MonoBehaviour
 	    }
 	}
 
-    public void initVolume(Texture3D tex3D)
+    public void initVolume(Texture tex3D)
     {
         this._volumeBuffer = tex3D;
         _rayMarchMaterial.SetTexture("_VolumeTex", _volumeBuffer);

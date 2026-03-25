@@ -36,6 +36,9 @@ namespace DICOMViews
         public GameObject Volume;
         public RayMarching RayMarching;
 
+        // Referencia al shader de GPU para inyectar al ImageStack dinámico
+        public ComputeShader DicomComputeShader;
+
         // Barra de herramientas o AppBar
         public GameObject AppBar;
 
@@ -96,6 +99,7 @@ namespace DICOMViews
 
             // Inicialización normal de ImageStack y SegmentCache
             _stack = gameObject.AddComponent<ImageStack>();
+            _stack.DicomComputeShader = this.DicomComputeShader; // Inyecta el shader de GPU asignado en el Editor
             _stack.OnTextureUpdate.AddListener(Slice2DView.TextureUpdated);
 
             _segmentCache = gameObject.AddComponent<SegmentCache>();

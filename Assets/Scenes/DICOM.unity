@@ -20225,6 +20225,7 @@ MonoBehaviour:
   SegmentConfiguration: {fileID: 54875360}
   Volume: {fileID: 2144018116}
   RayMarching: {fileID: 1117574542}
+  DicomComputeShader: {fileID: 7200000, guid: 4ffb6f7954c5e48849438f8b96b20a3b, type: 3}
   AppBar: {fileID: 2042269564}
 --- !u!4 &1621528989
 Transform:
@@ -23702,7 +23703,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879923546}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2518c50cb3fc6a6458d4b743c2f69c7d, type: 3}
   m_Name: 

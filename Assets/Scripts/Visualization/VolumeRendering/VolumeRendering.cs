@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace VolumeRendering
 {
@@ -19,7 +19,7 @@ namespace VolumeRendering
         [Range(0f, 2f)] private float _opacity = 1f;
         [Range(1, 256)] private int _stepCount = 128;
 
-        private Texture3D _volume;
+        private Texture _volume;
 
         private readonly Quaternion _axis = Quaternion.identity;
 
@@ -151,9 +151,9 @@ namespace VolumeRendering
             Destroy(Material);
         }
 
-        public void SetVolume(Texture3D texture3D)
+        public void SetVolume(Texture texture)
         {
-            Material.SetTexture("_Volume", texture3D);
+            Material.SetTexture("_Volume", texture);
         }
        
     }

@@ -1,0 +1,60 @@
+#pragma kernel ProcessVolume
+
+RWStructuredBuffer<uint> ResultColors;
+StructuredBuffer<int> DataBuffer;
+
+uint Width;
+uint Height;
+uint Depth;
+
+float WindowWidth;
+float WindowCenter;
+
+// Pack 4 floats (0-1) into a single 32-bit uint (Color32: R G B A)
+uint PackColor32(float4 color)
+{
+    uint r = (uint)(clamp(color.r, 0.0, 1.0) * 255.0);
+    uint g = (uint)(clamp(color.g, 0.0, 1.0) * 255.0);
+    uint b = (uint)(clamp(color.b, 0.0, 1.0) * 255.0);
+    uint a = (uint)(clamp(color.a, 0.0, 1.0) * 255.0);
+    return (a << 24) | (b << 16) | (g << 8) | r;
+}
+
+[numthreads(8, 8, 8)]
+void ProcessVolume (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= Width || id.y >= Height || id.z >= Depth) return;
+
+    // Calculate 1D index
+    uint index = id.z * Width * Height + id.y * Width + id.x;
+    
+    float intensity = (float)DataBuffer[index];
+
+    // Apply Window Width and Center
+    float center = WindowCenter;
+    float width = WindowWidth;
+
+    if (intensity <= center - 0.5 - (width - 1.0) / 2.0)
+    {
+        intensity = 0.0;
+    }
+    else if (intensity > center - 0.5 + (width - 1.0) / 2.0)
+    {
+        intensity = 255.0;
+    }
+    else
+    {
+        intensity = ((intensity - (center - 0.5)) / (width - 1.0) + 0.5) * 255.0;
+    }
+
+    // Evaluate DYN_ALPHA logic
+    float a = 1.0;
+    if (intensity < 120.0)
+    {
+        a = (240.0 * max(intensity - 15.0, 0.0) / 255.0) / 255.0;
+    }
+    
+    float normalized = intensity / 255.0;
+    
+    ResultColors[index] = PackColor32(float4(normalized, normalized, normalized, a));
+}
